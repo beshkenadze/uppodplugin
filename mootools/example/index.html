@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">
+<head>
+	<title>Библиотека управления Uppod Player для mootols</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+	<style type="text/css">
+		.example{
+			padding:5px;
+			margin:20px;
+			width:500px;
+		}
+		.command  {
+			display:inline;
+			padding:5px;
+			font-size:14px;
+			
+		}
+		.command li{
+			float:left;
+			list-style:none;
+			margin:5px;
+		}
+		.debug {
+			font-size:10px;
+			position:fixed;
+			top:0;
+			right:0;
+			width:400px;
+		}
+		p.error {
+			color:red;
+		}
+	</style>
+	
+</head>
+<body>
+	<a href="#" onclick="$('info').setStyle('display','block');return false;">Показать информацию о скрипте</a>
+	<div id="info" style="display:none">
+		<a href="#" onclick="$('info').setStyle('display','none');return false;">Скрыть информацию о скрипте</a>
+		<div style="">
+			Параметры.
+			<code>
+			<pre>
+				debug:false - Выключить/выключить отладку (по-умолчанию выключен)
+				player_id - ID плеера, для обращения к нем по API (по-умолчанию 'uppod_player'+Math.random())
+				width: - ширина
+				height:375 - высота
+				src: - 'swf/uppod.swf' - путь к флеш плееру
+				params - параметры. Пример: params :{movie:'http://site.ru/movie.flv'}
+				vars - flashvars. Пример: vars : {uid:'audioplayer1',st:'2iob3gRLvcwV3dJZvI9zvcu8Uf443HJhGxo70NJhGxo701YVvIolGArr'}
+			</pre>	
+			</code>
+		</div>
+		<div style="">
+			Комманды.
+			<code>
+			<pre>
+				Вызов через html: <?php echo htmlentities("<a href='#' class='uppod-command-single-audio-uppod-flash' rel='volume 0'>Volume 0</a>")?>,
+				где 'uppod-command-' обзательная часть, а 'single-audio-uppod-flash' - player_id.
+				где rel='volume 0' : "volume" -  комманда, "0" - значение
+				Пример: <?php echo htmlentities("<a href='#' class='uppod-command-single-audio-uppod-flash' rel='play'>play</a>")?> - начать проигрывание.
+				Так же можно вызвать через объект: single_red_uppod.play();
+			</pre>	
+			</code>
+		</div>
+		<div style="">
+			Список комманд.
+			<code>
+			<pre>
+				play - пуск
+				pause - пауза
+				toggle - переключение
+				stop - стоп,
+				startN - старт позиции плейлиста (N-порядковый номер позиции)
+				volumeN - громкость звука (N-звук в процентах)
+			</pre>	
+			</code>
+		</div>
+		<div>
+			Скрипт распространяется под лицензией <a href="gpl_ru.txt">GPL</a>. <br/>
+			<a href="js/moo.uppod.js">Скачать</a>
+		</div>
+	</div>
+	<center>
+	<div class="example" id="single-audio-uppod">
+		<div id="single-uppod-place"><img src="images/ajax1.gif" alt="Load"></div>
+		 <ul class="command">
+		 	<li><a href="#" class='uppod-command-single-audio-uppod-flash' rel='play'>Play</a></li>
+			<li><a href="#" class='uppod-command-single-audio-uppod-flash' rel='pause'>Pause</a></li>
+			<li><a href="#" class='uppod-command-single-audio-uppod-flash' rel='toggle'>Toggle</a></li>
+			<li><a href="#" class='uppod-command-single-audio-uppod-flash' rel='stop'>Stop</a></li>
+			<li><a href="#" onclick="uppods.single_red_uppod.getTimed('uppods.single_red_uppod.setTimed');return false;">Get timed</a></li>
+			
+		 </ul>
+	</div>
+	<div class="example" id="single-red-audio-uppod">
+		<div id="single-red-uppod-place">Загрузка...</div>
+		 <ul class="command">
+		 	<li><a href="#" class='uppod-command-single-red-audio-uppod-flash' rel='play'>Play</a></li>
+			<li><a href="#" class='uppod-command-single-red-audio-uppod-flash' rel='pause'>Pause</a></li>
+			<li><a href="#" class='uppod-command-single-red-audio-uppod-flash' rel='volume 0'>Volume 0</a></li>
+			<li><a href="#" class='uppod-command-single-red-audio-uppod-flash' rel='volume 50'>Volume 50</a></li>
+			<li><a href="#" onclick="uppods.single_red_uppod.getv();return false;">Get Volume</a></li>
+			<li><a href="#" onclick="uppods.single_red_uppod.getTime('uppods.single_red_uppod.setTime');return false;">Get time</a></li>
+			<li><a href="#" onclick="uppods.single_red_uppod.startTimer('updater()',1000);return false;">Start Timer</a></li>
+		 </ul>
+	</div>
+	<div class="example" id="playlist-video-uppod">
+		<div id="playlist-video-uppod-place"><img src="images/ajax2.gif" alt="Load"></div>
+		 <ul class="command">
+		 	<li><a href="#" class='uppod-command-playlist-video-uppod-flash' rel='play'>Play</a></li>
+			<li><a href="#" class='uppod-command-playlist-video-uppod-flash' rel='pause'>Pause</a></li>
+			<li><a href="#" class='uppod-command-playlist-video-uppod-flash' rel='toggle'>Toggle</a></li>
+			<li><a href="#" class='uppod-command-playlist-video-uppod-flash' rel='stop'>Stop</a></li>
+			<li><a href="#" class='uppod-command-playlist-video-uppod-flash' rel='start 1'>Start 1</a></li>
+			<li><a href="#" class='uppod-command-playlist-video-uppod-flash' rel='start 2'>Start 2</a></li>
+			<li><a href="#" class='uppod-command-playlist-video-uppod-flash' rel='start 3'>Start 3</a></li>
+			<li><a href="#" class='uppod-command-playlist-video-uppod-flash' rel='start 4'>Start 4</a></li>
+		 </ul>
+	</div>
+	<div class="example" id="playlist-audio-uppod">
+		<div id="playlist-audio-uppod-place"><img src="images/ajax.gif" alt="Load"></div>
+		 <ul class="command">
+			<li><a href="#" class='uppod-command-playlist-audio-uppod-flash' rel='start 1'>Start 1</a></li>
+			<li><a href="#" class='uppod-command-playlist-audio-uppod-flash' rel='start 2'>Start 2</a></li>
+			<li><a href="#" class='uppod-command-playlist-audio-uppod-flash' rel='start 3'>Start 3</a></li>
+			<li><a href="#" class='uppod-command-playlist-audio-uppod-flash' rel='start 4'>Start 4</a></li>
+			<li><a href="#" class='uppod-command-playlist-audio-uppod-flash' rel='getpl'>Get Playlist</a></li>
+		 </ul>
+	</div>
+	</center>
+<script src="http://www.google.com/jsapi"></script>
+<script>
+var uppods = {};
+function uppodGetVolume(vol){
+	if(window.console){
+		console.log('Звук равен %s',vol);
+	}else{
+		alert('Звук равен '+pl);
+	}
+}
+function uppodGetNpl(pl){
+	if(window.console){
+		console.log('Номер плейлиста %s',pl);
+	}else{
+		alert('Номер плейлиста '+pl);
+	}
+	
+}
+  // Load Mootools
+  google.load("mootools", "1.2.1");
+  google.setOnLoadCallback(function() {
+  	window.addEvent('domready', function() {
+	 	var error_emulate = new Uppod('error_emulate',{debug:true});
+	    uppods.single_uppod = new Uppod('single-uppod-place',{
+		debug:true,
+		player_id:'single-audio-uppod-flash',
+		width:43,
+		height:43,
+		params:{
+			'movie':'http://south-park.su/uppod/sample.mp3'
+		},
+		vars:{
+			uid:'audioplayer1',
+			st:'2iob3gRLvcwV3dJZvI9zvcu8Uf443HJhGxo70NJhGxo701YVvIolGArr',
+			pl:'2iob3gRLvcwV3dJZvI9zvcu8Uf443HJhGxo70aW73cTL3dWh6xW73coXUfwZ2xsNyHmb6iTr'
+		}
+		});
+		uppods.single_red_uppod = new Uppod('single-red-uppod-place',{
+			player_id:'single-red-audio-uppod-flash',
+			debug:true,
+			width:400,
+			height:36,
+			vars:{
+				uid:'audioplayer2',
+				st:'2iob3gRLvcwV3dJZvI9zvcu8Uf443HJhGxo70NJhGxo7013BGihb',
+				file:'2iob3gRLvaFzkd4LvIwV3dJZv5m4GCJ1UxzV0dYB0fA1'
+		 	}
+		});
+		
+		uppods.playlist_video_uppod = new Uppod('playlist-video-uppod-place',{
+			player_id:'playlist-video-uppod-flash',
+			debug:true,
+			width:400,
+			height:290,
+			vars:{
+				uid:'videoplayer3',
+				st:'2iob3gRLvcwV3dJZvI9zvcu8Uf443HJa2xo40NJa2xo401EVOCmb6iTr',
+				pl:'2iob3gRLvcwV3dJZvI9zvcu8Uf443HJa2xo40aW73cTL3dWh6xW73coXG54ZkxsatHmb6iTr'
+			}
+		});
+		var playlist_audio_uppod = new Uppod('playlist-audio-uppod-place',{
+			player_id:'playlist-audio-uppod-flash',
+			debug:true,
+			width:262,
+			height:200,
+			vars:{
+				uid:'audioplayer4',
+				st:'2iob3gRLvcwV3dJZvI9zvck7kdwL3dWh6xwNvck7kdwLk548kSJhGxo70131OSmb6iTr',
+				pl:'2iob3gRLvcwV3dJZvI9zvck7kdwL3dWh6xwNvck7kdwLvcu8Uf482fybfaFzkd4LygTmvIolGArr'
+			}
+		});
+	});
+  });
+
+function updater(){
+	uppods.single_red_uppod.getTime('uppods.single_red_uppod.setTime');
+	var time = uppods.single_red_uppod.time;
+	uppods.single_red_uppod.log('Текущая позиция '+Math.round(time)+' сек.');
+}
+</script>
+<script type="text/javascript" src="./js/moo.uppod.js"></script>
+</body>
+</html>
