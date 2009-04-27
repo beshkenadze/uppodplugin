@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">
+<head>
+    <title>Библиотека управления Uppod Player для jquery</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <style type="text/css">
+        .example{
+            padding:5px;
+            margin:20px;
+            width:500px;
+        }
+        .command  {
+            display:inline;
+            padding:5px;
+            font-size:14px;
+            
+        }
+        .command li{
+            float:left;
+            list-style:none;
+            margin:5px;
+        }
+        .debug {
+            font-size:10px;
+            position:fixed;
+            top:0;
+            right:0;
+            width:400px;
+        }
+        p.error {
+            color:red;
+        }
+    </style>
+</head>
+<body>
+    <div class="example" id="single-audio-uppod">
+        <div id="single-uppod-place"><img src="images/ajax1.gif" alt="Load"></div>
+         <ul class="command">
+            <li><a href="#" class='uppod-command-single-audio-uppod-flash' rel='play'>Play</a></li>
+            <li><a href="#" class='uppod-command-single-audio-uppod-flash' rel='pause'>Pause</a></li>
+            <li><a href="#" class='uppod-command-single-audio-uppod-flash' rel='toggle'>Toggle</a></li>
+            <li><a href="#" class='uppod-command-single-audio-uppod-flash' rel='stop'>Stop</a></li>
+         </ul>
+    </div>
+    <div class="example" id="single-red-audio-uppod">
+        <div id="single-red-uppod-place">Загрузка...</div>
+         <ul class="command">
+            <li><a href="#" class='uppod-command-single-red-audio-uppod-flash' rel='play'>Play</a></li>
+            <li><a href="#" class='uppod-command-single-red-audio-uppod-flash' rel='pause'>Pause</a></li>
+            <li><a href="#" class='uppod-command-single-red-audio-uppod-flash' rel='volume 0'>Volume 0</a></li>
+            <li><a href="#" class='uppod-command-single-red-audio-uppod-flash' rel='volume 50'>Volume 50</a></li>
+            <li><a href="#" onclick="uppods.single_red_uppod.getv();return false;">Get Volume</a></li>
+         </ul>
+    </div>
+    <div class="example" id="playlist-video-uppod">
+        <div id="playlist-video-uppod-place"><img src="images/ajax2.gif" alt="Load"></div>
+         <ul class="command">
+            <li><a href="#" class='uppod-command-playlist-video-uppod-flash' rel='play'>Play</a></li>
+            <li><a href="#" class='uppod-command-playlist-video-uppod-flash' rel='pause'>Pause</a></li>
+            <li><a href="#" class='uppod-command-playlist-video-uppod-flash' rel='toggle'>Toggle</a></li>
+            <li><a href="#" class='uppod-command-playlist-video-uppod-flash' rel='stop'>Stop</a></li>
+            <li><a href="#" class='uppod-command-playlist-video-uppod-flash' rel='start 1'>Start 1</a></li>
+            <li><a href="#" class='uppod-command-playlist-video-uppod-flash' rel='start 2'>Start 2</a></li>
+            <li><a href="#" class='uppod-command-playlist-video-uppod-flash' rel='start 3'>Start 3</a></li>
+            <li><a href="#" class='uppod-command-playlist-video-uppod-flash' rel='start 4'>Start 4</a></li>
+         </ul>
+    </div>
+    <div class="example" id="playlist-audio-uppod">
+        <div id="playlist-audio-uppod-place"><img src="images/ajax.gif" alt="Load"></div>
+         <ul class="command">
+            <li><a href="#" class='uppod-command-playlist-audio-uppod-flash' rel='start 1'>Start 1</a></li>
+            <li><a href="#" class='uppod-command-playlist-audio-uppod-flash' rel='start 2'>Start 2</a></li>
+            <li><a href="#" class='uppod-command-playlist-audio-uppod-flash' rel='start 3'>Start 3</a></li>
+            <li><a href="#" class='uppod-command-playlist-audio-uppod-flash' rel='start 4'>Start 4</a></li>
+            <li><a href="#" class='uppod-command-playlist-audio-uppod-flash' rel='getpl'>Get Playlist</a></li>
+         </ul>
+    </div>
+    <script src="http://www.google.com/jsapi"></script>
+    
+    <script>
+      // Load jQuery
+      var uppods = {};
+      google.load("jquery", "1");
+      google.setOnLoadCallback(function() {
+        $(document).ready(function () {
+            var error_emulate = $.uppod('error_emulate',{debug:true});
+            uppods.single_uppod = $.uppod('single-uppod-place',{
+            debug:true,
+            player_id:'single-audio-uppod-flash',
+            width:43,
+            height:43,
+            params:{
+                'movie':'http://south-park.su/uppod/sample.mp3'
+            },
+            vars:{
+                uid:'audioplayer1',
+                st:'2iob3gRLvcwV3dJZvI9zvcu8Uf443HJhGxo70NJhGxo701YVvIolGArr',
+                pl:'2iob3gRLvcwV3dJZvI9zvcu8Uf443HJhGxo70aW73cTL3dWh6xW73coXUfwZ2xsNyHmb6iTr'
+            }
+            });
+            uppods.single_red_uppod = $.uppod('single-red-uppod-place',{
+                player_id:'single-red-audio-uppod-flash',
+                debug:true,
+                width:400,
+                height:36,
+                vars:{
+                    uid:'audioplayer2',
+                    st:'2iob3gRLvcwV3dJZvI9zvcu8Uf443HJhGxo70NJhGxo7013BGihb',
+                    file:'2iob3gRLvaFzkd4LvIwV3dJZv5m4GCJ1UxzV0dYB0fA1'
+                }
+            });
+            uppods.playlist_video_uppod = $.uppod('playlist-video-uppod-place',{
+                player_id:'playlist-video-uppod-flash',
+                debug:true,
+                width:400,
+                height:290,
+                vars:{
+                    uid:'videoplayer3',
+                    st:'2iob3gRLvcwV3dJZvI9zvcu8Uf443HJa2xo40NJa2xo401EVOCmb6iTr',
+                    pl:'2iob3gRLvcwV3dJZvI9zvcu8Uf443HJa2xo40aW73cTL3dWh6xW73coXG54ZkxsatHmb6iTr'
+                }
+            });
+            var playlist_audio_uppod = $.uppod('playlist-audio-uppod-place',{
+                player_id:'playlist-audio-uppod-flash',
+                debug:true,
+                width:262,
+                height:200,
+                vars:{
+                    uid:'audioplayer4',
+                    st:'2iob3gRLvcwV3dJZvI9zvck7kdwL3dWh6xwNvck7kdwLk548kSJhGxo70131OSmb6iTr',
+                    pl:'2iob3gRLvcwV3dJZvI9zvck7kdwL3dWh6xwNvck7kdwLvcu8Uf482fybfaFzkd4LygTmvIolGArr'
+                }
+            });
+        });
+      });
+    </script>
+    <script src="js/jquery.flash.js"></script>
+    <script src="js/jquery.uppod.js"></script>
+</body>
+</html>
