@@ -15,6 +15,7 @@ jQuery.uppod = function(container,options){
 		debug:false,
 		player_id : 'uppod_player'+Math.random(),
 		width:500,
+		src: 'http://uppodplugin.googlecode.com/svn/trunk/uppod/uppod.swf',
 		height:375,
 		params: {
 			'movie':'http://video-2-4.rutube.ru/v1-5/s1-28/297ec50dc34e9a7a586e2e9344faca9b-1224670229.iflv?e=1237968727&s=d49fc8c2be84bbeb35f0c8aa331b961f'
@@ -54,7 +55,7 @@ jQuery.uppod.init = function(){
 	$('#'+jQuery.uppod.vars.container).flash(
 	        { 
 			  id:jQuery.uppod.vars.player_id,
-	          src: './swf/uppod.swf?' + Math.random(),
+	          src: jQuery.uppod.vars.src+ '?' + Math.random(),
 	          width: jQuery.uppod.vars.width,
 	          height: jQuery.uppod.vars.height,
 	          flashvars: jQuery.uppod.vars.vars
