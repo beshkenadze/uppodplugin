@@ -1,0 +1,182 @@
+<!DOCTYPE HTML>
+<html lang="ru-RU">
+<head>
+	<meta charset="UTF-8">
+	<title>Moo(u)ppod</title>
+	<link rel="stylesheet" href="css/master.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	
+</head>
+<body>
+	<div id="wrap">
+		<div id="player-1">
+	        
+	    </div>
+	    <div id="controls" class="hide">
+	        <a href="#" class="uppod-player-1 play f-left" rel="play">&nbsp;</a>
+	        <a href="#" class="uppod-player-1 f-left stop" rel="stop">&nbsp;</a>
+	        <div id="time" class="slider advanced f-left">
+	            <div class="knob">
+	            </div>
+	        </div>
+	         <a href="#" class="uppod-player-1 rewind f-left" rel="rewind">&nbsp;</a>
+	         <a href="#" class="uppod-player-1 forward f-left" rel="forward">&nbsp;</a>
+	         <div id="volume" class="slider volume f-left">
+	            <div class="knob">
+	            </div>
+	        </div>
+	        <a href="#" class="uppod-player-1 fullscreen f-left" rel="fullscreen">&nbsp;</a>
+	    </div>
+	    <br/>
+	    <div id="texts" class="hide">
+	    <form>
+	       <p><input size="100" value="<img align='top' width='16' src='/mooppod/icons/Information.png'/>Этот текст <b>можно</b> закрыть!" id="text"/> <button id="set-text">Установить текст</button></p>
+	       <p><input size="70" value="<i>Этот</i> текст можно закрыть <b>только</b> <u>кнопкой</u>!" id="text2"/> <button id="set-text2">Установить не закрываемый текст</button><button  id="close-text">Закрыть текст</button></p>
+	    </form>
+	    </div>
+	</div>
+	<script src="js/mootools-1.2.3-core-yc.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mootools-1.2.3.1-more.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/moo.uppod.js" type="text/javascript" charset="utf-8"></script>
+	
+	<script type="text/javascript"><!--
+	    var timed = 0;
+        var time = 0;
+        var percent = 0;
+        var player_1 = {};
+        var status = 0;
+        var change_pos = 0;
+        var slider = {};
+        var onPlay = false;
+        var volume_slider = {};
+		window.addEvent('domready',function(e){
+			player_1 = new Uppod('player-1',{
+				player_id: 'uppod-player-1',
+				width: 800,
+				height: 400,
+				vars:{
+					file:'/mooppod/assets/movie.mp4',
+					st:'info/st.txt'
+				}
+			});
+			
+			$$('a.uppod-player-1.play').addEvent('click',function(e){
+				e.stop();
+				if($(this).hasClass('play')){
+					onPlay = true;
+					startPlayer();
+				}else{
+					pausePlayer();
+				}
+			});
+			$$('a.uppod-player-1.stop').addEvent('click',function(e){
+                e.stop();
+                onPlay = false;
+                stopPlayer();
+            });
+			$$('a.uppod-player-1.fullscreen').addEvent('click',function(e){
+				player_1.fullscreen();
+            });
+			$('set-text').addEvent('click',function(e){
+			    player_1.setClosedText($('text').get('value'));
+            });
+			$('set-text2').addEvent('click',function(e){
+                player_1.setText($('text2').get('value'));
+            });
+			$('close-text').addEvent('click',function(e){
+                player_1.removeText();
+            });
+			$$('a.uppod-player-1.forward').addEvent('click',function(e){
+                e.stop();
+                if(time+30 < timed) {
+                	player_1.seek(time+30);
+                }else{
+                	player_1.seek(timed);
+                }
+            });
+			$$('a.uppod-player-1.rewind').addEvent('click',function(e){
+                e.stop();
+                if(time > 30) {
+                	player_1.seek(time-30);
+                }else{
+                	player_1.seek(0);
+                }
+                
+            });
+		});
+	var getTime = function (){
+	    player_1.getTime('uppodGetTime');
+        if(timed <= 0) {
+            player_1.getTimed('uppodGetTimed');
+        }
+    }
+	function uppodGetTime(cur_time){
+		time = Math.round(cur_time);
+		if(timed > 0 && time > 0) {
+			var round_p = (percent*time);
+			if(!change_pos) $('time').getElement('.knob').setStyle('left',round_p);
+		}
+		
+	}
+	function stopPlayer(){
+		 $$('.pause').removeClass('pause').addClass('play');
+         player_1.stop();
+         slider.set(0);
+	}
+	function pausePlayer(){
+		$$('.pause').removeClass('pause').addClass('play');
+        player_1.pause();
+    }
+	function startPlayer(){
+		if(onPlay) {
+			$$('.play').removeClass('play').addClass('pause');
+	        player_1.play();
+		}
+    }
+	function uppodGetTimed(full_time){
+	       if(full_time != 'NaN' && full_time > 0) {
+	    	    timed =  Math.round(full_time);
+	    	    percent = $('time').getWidth()/timed;
+	    	    startSlider();
+	    	    startVolumeSlider();
+	       }
+    }
+    function startSlider(){
+    	slider = new Slider($('time'), $('time').getElement('.knob'), {
+            steps: timed,  // Steps from 0 to 255
+            wheel: true, // Using the mousewheel is possible too
+            onComplete: function(pos){
+  		        player_1.seek(pos);
+    		    startPlayer();
+    		    change_pos = false;
+            },
+            onChange: function(){
+            	if(status) pausePlayer();
+            	change_pos = true;
+            	player_1.getStatus('setStatus');
+            }
+        }).set(0);
+    }
+    function startVolumeSlider(){
+    	volume_slider = new Slider($('volume'), $('volume').getElement('.knob'), {
+            steps: 100,  // Steps from 0 to 255
+            wheel: true, // Using the mousewheel is possible too
+            onChange: function(pos){
+                player_1.volume(pos);
+            }
+        }).set(50);
+    }
+    function setStatus(s){
+        status = s;
+    }
+    function uppodTheEnd(){
+ 	   stopPlayer();
+  	   onPlay = false;
+    }
+    function uppodInit(){
+    	var intervalID = getTime.periodical(1000);
+    	$('controls').tween('opacity',1).removeClass('hide');
+    	$('texts').tween('opacity',1).removeClass('hide');
+    }
+	--></script>
+</body>
+</html>
