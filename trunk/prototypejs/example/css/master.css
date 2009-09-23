@@ -1,0 +1,73 @@
+#wrap {
+	margin:0 auto;
+	width: 850px;
+}
+#player-1 {
+	width: 800px;
+	height: 400px;
+	background: url(../icons/loadinfo.net.gif) center no-repeat;
+}
+img {
+	border:0;
+}
+.hide {
+	display:none;
+	opacity:0;
+}
+.play, .pause, .stop,.forward, .rewind, .fullscreen {
+	display: block;
+	width: 32px;
+	height: 32px;
+	background:#fff url(../icons/Play.png) no-repeat;
+	text-decoration:none;
+}
+.pause {
+	background:#fff url(../icons/Pause.png) no-repeat;
+}
+.stop {
+	background:#fff url(../icons/Stop.png) no-repeat;
+}
+.forward {
+	background:#fff url(../icons/Fastfroward.png) no-repeat;
+}
+.rewind {
+	background:#fff url(../icons/Rewind.png) no-repeat;
+}
+.fullscreen {
+    background:#fff url(../icons/Full.png) no-repeat;
+}
+.command {
+	float:left;
+}
+.f-left {
+	float:left;
+}
+div.slider {
+	margin-top:8px;
+    width: 520px;
+    height: 16px;
+    background: #eee;
+	cursor: pointer;
+	margin-right: 5px;
+}
+div.volume {
+    margin-top:12px;
+    width: 118px;
+    height: 5px;
+    background: #eee;
+    cursor: pointer;
+}
+div.slider div.knob {
+    background: #000;
+    width: 8px;
+    height: 16px;
+    cursor: pointer;
+}
+div.volume div.knob {
+    background: #000;
+    width: 8px;
+    height: 5px;
+    cursor: pointer;
+	left:55px;
+	position: relative;
+}

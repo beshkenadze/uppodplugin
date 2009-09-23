@@ -1,0 +1,153 @@
+<!DOCTYPE HTML>
+<html lang="ru-RU">
+<head>
+    <meta charset="UTF-8">
+    <title>Protopod</title>
+    <link rel="stylesheet" href="css/master.css" type="text/css" media="screen" title="no title" charset="utf-8">
+</head>
+<body>
+    <div id="wrap">
+        <div id="player-1">
+        </div>
+        <div id="controls" class="hide">
+            <a href="#" class="uppod-player-1 play f-left" rel="play">&nbsp;</a>
+        </div>
+        <br/>
+        <div id="texts" class="hide">
+        <form>
+           <p><input size="100" value="<img align='top' width='16' src='/mooppod/icons/Information.png'/>Этот текст <b>можно</b> закрыть!" id="text"/> <button id="set-text">Установить текст</button></p>
+           <p><input size="70" value="<i>Этот</i> текст можно закрыть <b>только</b> <u>кнопкой</u>!" id="text2"/> <button id="set-text2">Установить не закрываемый текст</button><button  id="close-text">Закрыть текст</button></p>
+        </form>
+        </div>
+    </div>
+<script src="http://www.google.com/jsapi"></script>
+<script>
+  // Load jQuery
+  google.load("prototype", "1.6.0.3");
+  google.load("swfobject", "2.2");
+  // on page load complete, fire off a jQuery json-p query
+  // against Google web search
+  google.setOnLoadCallback(function() {
+      player_1 = new Uppod('player-1', {
+          player_id: 'uppod-player-1',
+          width: 800,
+          height: 400,
+          vars: {
+              file: 'https://content16.wuala.com/contents/beshkenadze/Videos/How.I.Met.Your.Mother.s4.e01.Rus.%5BKuraj-Bambey.Ru%5D.mp4?key=PmI6QTvqmJFG&dl=1',
+              st: 'info/st.txt'
+          }
+      });
+      $$('a.uppod-player-1.play').each(function(item){
+          item.observe('click', function(e){
+              e.stop();
+              if ($(this).hasClassName('play')) {
+                  onPlay = true;
+                  startPlayer();
+              }
+              else {
+                  pausePlayer();
+              }
+          });
+      })
+      $('set-text').observe('click', function(e){
+          e.stop();
+          player_1.setClosedText($('text').readAttribute('value'));
+      });
+      $('set-text2').observe('click', function(e){
+          e.stop();
+          player_1.setText($('text2').readAttribute('value'));
+      });
+      $('close-text').observe('click', function(e){
+          e.stop();
+          player_1.removeText();
+      });
+  });
+  var getTime = function (){
+        player_1.getTime('uppodGetTime');
+        if(timed <= 0) {
+            player_1.getTimed('uppodGetTimed');
+        }
+    }
+    function uppodGetTime(cur_time){
+        time = Math.round(cur_time);
+        if(timed > 0 && time > 0) {
+            var round_p = (percent*time);
+            if (!change_pos) {
+                $('time').getElementsBySelector('.knob').setStyle('left', round_p);
+            }
+        }
+        
+    }
+    function stopPlayer(){
+         $$('.pause').each(function(item){
+            item.removeClassName('pause').addClassName('play');
+        });
+         player_1.stop();
+         slider.set(0);
+    }
+    function pausePlayer(){
+        $$('.pause').each(function(item){
+            item.removeClassName('pause').addClassName('play');
+        });
+        player_1.pause();
+    }
+    function startPlayer(){
+        if(onPlay) {
+            $$('.play').each(function(item){
+                item.removeClassName('play').addClassName('pause');
+            });
+            player_1.play();
+        }
+    }
+    function uppodGetTimed(full_time){
+           if(full_time != 'NaN' && full_time > 0) {
+                timed =  Math.round(full_time);
+                percent = $('time').getWidth()/timed;
+                startSlider();
+                startVolumeSlider();
+           }
+    }
+    function startSlider(){
+        slider = new Slider($('time'), $('time').getElement('.knob'), {
+            steps: timed,  // Steps from 0 to 255
+            wheel: true, // Using the mousewheel is possible too
+            onComplete: function(pos){
+                player_1.seek(pos);
+                startPlayer();
+                change_pos = false;
+            },
+            onChange: function(){
+                if(status) pausePlayer();
+                change_pos = true;
+                player_1.getStatus('setStatus');
+            }
+        }).set(0);
+    }
+    function startVolumeSlider(){
+        volume_slider = new Slider($('volume'), $('volume').getElement('.knob'), {
+            steps: 100,  // Steps from 0 to 255
+            wheel: true, // Using the mousewheel is possible too
+            onChange: function(pos){
+                player_1.volume(pos);
+            }
+        }).set(50);
+    }
+    
+    function setStatus(s){
+        status = s;
+    }
+    function uppodTheEnd(){
+       stopPlayer();
+       onPlay = false;
+    }
+    function uppodInit(){
+        new PeriodicalExecuter(getTime, 1000)
+        $('controls').removeClassName('hide');
+        $('texts').removeClassName('hide');
+    }
+</script>
+<script src="js/protopod.js"></script>
+<script src="js/swiff-prototype.js"></script>
+<script src="js/browser.js"></script>
+</body>
+</html>
